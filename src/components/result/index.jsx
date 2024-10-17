@@ -33,59 +33,11 @@ function Result() {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Funciones Guardadas</title>
-                <style>
-                    body {
-                        font-family: 'Arial', sans-serif;
-                        background-color: #f0f4f8;
-                        color: #333;
-                        margin: 20px;
-                    }
-                    h1 {
-                        text-align: center;
-                        color: #4a90e2;
-                    }
-                    .file-section {
-                        margin-bottom: 30px;
-                        padding: 20px;
-                        border: 1px solid #e1e1e1;
-                        border-radius: 8px;
-                        background-color: #fff;
-                        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-                    }
-                    h2 {
-                        margin: 0 0 10px;
-                        color: #4a90e2;
-                        border-bottom: 2px solid #4a90e2;
-                        padding-bottom: 5px;
-                    }
-                    ul {
-                        list-style-type: none;
-                        padding-left: 0;
-                    }
-                    li {
-                        margin-bottom: 15px;
-                        padding: 15px;
-                        border: 1px solid #ddd;
-                        border-radius: 5px;
-                        background-color: #f9f9f9;
-                        transition: background-color 0.3s;
-                    }
-                    li:hover {
-                        background-color: #e1f5fe;
-                    }
-                    strong {
-                        display: block;
-                        margin-bottom: 5px;
-                        color: #333;
-                    }
-                    p {
-                        margin: 5px 0;
-                        color: #555;
-                    }
-                </style>
+                <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+                <link href="https://cdn.jsdelivr.net/npm/daisyui@1.14.0/dist/full.css" rel="stylesheet">
             </head>
-            <body>
-                <h1>Funciones Guardadas</h1>
+            <body class="bg-base-200 text-base-content p-6">
+                <h1 class="text-3xl text-center text-primary mb-8">Funciones Guardadas</h1>
                 <div id="resultado">
                     ${resultadoHTML}
                 </div>
@@ -104,40 +56,48 @@ function Result() {
         URL.revokeObjectURL(url);
     };
 
-    return (
-        <div>
-            <h1>Funciones Guardadas</h1>
-            <button onClick={handleDownload}>Descargar Página</button>
-            <div id="resultado">
-                {Object.keys(funcionesPorArchivo).length > 0 ? (
-                    Object.keys(funcionesPorArchivo).map(file => (
-                        <div key={file} className="file-section">
-                            <h2>{file}</h2>
-                            <ul>
-                                {funcionesPorArchivo[file].map((funcion, index) => (
-                                    <li key={index}>
-                                        <strong>{funcion.name}</strong>
-                                        <p><strong>Description:</strong> {funcion.documentation.description}</p>
-                                        <p><strong>Parameters:</strong> {funcion.documentation.params.length > 0 ? (
-                                            funcion.documentation.params.map(param => (
-                                                <span key={param.name}>
-                                                    <br />- {param.name} ({param.type}): {param.description}
-                                                </span>
-                                            ))
-                                        ) : 'Ninguno'}</p>
-                                        <p><strong>Returns:</strong> {funcion.documentation.returns ? (
-                                            `${funcion.documentation.returns.type}: ${funcion.documentation.returns.description}`
-                                        ) : 'Ninguno'}</p>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    ))
-                ) : (
-                    <p>No hay funciones guardadas en la sesión.</p>
-                )}
+    const renderFunciones = () => {
+        if (Object.keys(funcionesPorArchivo).length === 0) {
+            return <p>Hubo un error al tomar el archivo. Disculpe las molestias.</p>;
+        }
+
+        return Object.keys(funcionesPorArchivo).map(file => (
+            <div key={file} className="file-section mb-6 p-4 border rounded-lg shadow-md">
+                <h2 className="text-2xl text-primary mb-4">{file}</h2>
+                <ul className="list-none">
+                    {funcionesPorArchivo[file].map((funcion, index) => (
+                        <li key={index} className="mb-4 p-4 rounded-lg shadow-sm ">
+                            <strong className="block text-lg">{funcion.name}</strong>
+                            <p><strong>Description:</strong> {funcion.documentation.description}</p>
+                            <p>
+                                <strong>Parameters:</strong> {funcion.documentation.params.length > 0 ? (
+                                    funcion.documentation.params.map(param => (
+                                        <span key={param.name} className="block">
+                                            - {param.name} ({param.type}): {param.description}
+                                        </span>
+                                    ))
+                                ) : 'Ninguno'}
+                            </p>
+                            <p>
+                                <strong>Returns:</strong> {funcion.documentation.returns ? (
+                                    `${funcion.documentation.returns.type}: ${funcion.documentation.returns.description}`
+                                ) : 'Ninguno'}
+                            </p>
+                        </li>
+                    ))}
+                </ul>
             </div>
-        </div>
+        ));
+    };
+
+    return (
+        <>
+            <h1 className="text-3xl text-center text-primary mb-8">Funciones Guardadas</h1>
+            <button className="btn btn-primary mb-6" onClick={handleDownload}>Descargar Página</button>
+            <div id="resultado">
+                {renderFunciones()}
+            </div>
+        </>
     );
 }
 
