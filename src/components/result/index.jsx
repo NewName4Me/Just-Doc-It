@@ -81,7 +81,7 @@ function Result() {
                             <p>
                                 <strong>Returns:</strong> {funcion.documentation.returns ? (
                                     `${funcion.documentation.returns.type}: ${funcion.documentation.returns.description}`
-                                ) : 'Ninguno'}
+                                ) : 'void'}
                             </p>
                         </li>
                     ))}
