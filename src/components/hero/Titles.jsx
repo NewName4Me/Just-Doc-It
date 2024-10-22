@@ -3,8 +3,10 @@ import React from 'react'
 function Titles() {
     return (
         <section>
-            <h1 className='text-6xl font-extrabold text-[#cfcfcf] '>
-                From code to docs&nbsp;
+            <h1 className='text-6xl font-extrabold text-[#cfcfcf]'>
+                From code to
+                <br />
+                docs&nbsp;
                 <span className='relative text-[#2E1A05]'>
                     <span
                         className='absolute inset-0 mt-1 mx-[-0.5rem] bg-[#D2CBC6] rotate-[-1deg] -z-10'

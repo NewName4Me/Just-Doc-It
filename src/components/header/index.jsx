@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import logoBlue from '../../assets/logoBlue.png';
-import { stopLinkUsage } from '../../utils/headerHelper.js';
+import logoBlue from '@assets/logoBlue.png';
+import { stopLinkUsage } from '@utils/headerHelper.js';
 
 function index() {
 
