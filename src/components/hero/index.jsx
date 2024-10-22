@@ -5,7 +5,7 @@ function index() {
     return (
         <>
             <Header />
-            <h1>Hero</h1>
+        
         </>
     )
 }
