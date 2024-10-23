@@ -16,6 +16,6 @@ export default {
     require('@tailwindcss/typography'),
   ],
   daisyui: {
-    themes: ["business", "fantasy"],
+    themes: ["dark", "fantasy"],
   },
 }
