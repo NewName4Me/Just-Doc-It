@@ -1,11 +1,12 @@
 import React from 'react';
-import { useLocation, useParams, Link } from 'react-router-dom';
+import { useLocation, useParams, useNavigate } from 'react-router-dom'; // Importar useNavigate
 import Header from '@components/header/HeaderIndex';
 import { procesarArchivosJs } from '@utils/procesarArchivosSegunLenguaje';
 
 function FileContent() {
     const { id } = useParams();
     const location = useLocation();
+    const navigate = useNavigate(); // Instancia de navigate
     const { uploadedFiles } = location.state || {};
 
     if (!uploadedFiles) {
@@ -44,13 +45,12 @@ function FileContent() {
             <Header />
             <main className='h-screen pt-20 pl-16 bg-gray-800'>
                 <h1 className='text-white text-3xl mb-8'>Contenido de {file.name}</h1>
-                <Link
-                    to="/result"
-                    state={{ uploadedFiles }}
+                <button
+                    onClick={() => navigate(-1)} // Navegar hacia atrás
                     className="mt-4 inline-block text-white bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded"
                 >
                     Volver a la lista de archivos
-                </Link>
+                </button>
 
                 <div className="mt-6 space-y-4">
                     {fileContent.length > 0 ? (
