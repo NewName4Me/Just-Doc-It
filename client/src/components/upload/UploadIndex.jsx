@@ -10,6 +10,12 @@ function Index() {
     const [selectedLanguage, setSelectedLanguage] = useState('');
     const navigate = useNavigate();
 
+    const languageExtensions = {
+        js: '.js',
+        php: '.php',
+        py: '.py',
+    };
+
     const handleSubmit = (event) => {
         event.preventDefault();
         const inputElement = event.target.querySelector('input[type="file"]');
@@ -19,11 +25,15 @@ function Index() {
         const language = languageElement.value;
 
         if (uploadedFiles.length > 0) {
-            setSelectedFiles(uploadedFiles);
+            const filteredFiles = uploadedFiles.filter(file =>
+                file.name.endsWith(languageExtensions[language])
+            );
+
+            setSelectedFiles(filteredFiles);
             setSelectedLanguage(language);
 
-            // Redirigir a la página "/result" pasando los datos
-            navigate('/result', { state: { uploadedFiles, language } });
+            // Redirigir a la página "/result" pasando solo los archivos filtrados
+            navigate('/result', { state: { uploadedFiles: filteredFiles, language } });
         }
     };
 
