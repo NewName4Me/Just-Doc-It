@@ -9,12 +9,6 @@ function FileContent() {
     const navigate = useNavigate(); // Instancia de navigate
     const { uploadedFiles, language } = location.state || {}; // Desestructurando language
 
-    React.useEffect(() => {
-        if (language) {
-            alert(`Lenguaje seleccionado: ${language}`); // Imprimir el lenguaje en alerta
-        }
-    }, [language]);
-
     if (!uploadedFiles) {
         return <p className="text-white">No hay archivos disponibles.</p>;
     }

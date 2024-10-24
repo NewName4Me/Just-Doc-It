@@ -9,7 +9,7 @@ function buttons() {
                 <option value="null">Select a Language</option>
                 <option value="js">Javascript (.js)</option>
                 <option value="php" >PHP (.php)</option>
-                <option value="py" disabled>Python (.py)</option>
+                <option value="py">Python (.py)</option>
             </select>
 
             <button type='submit' className='btn btn-warning flex items-center justify-center relative w-48'>
