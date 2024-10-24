@@ -32,11 +32,11 @@ function ResultIndex() {
 
                                 return (
                                     <li key={uniqueId} className='text-white flex items-center'>
-                                        <span className='w-4 h-4 rounded-full bg-success mr-4'></span>
+                                        <span className='w-5 h-5 rounded-full bg-success mr-4'></span>
                                         <Link
                                             to={`/result/${uniqueId}`}
                                             state={{ uploadedFiles, language }} // Pasar el estado necesario
-                                            className='text-white hover:underline'
+                                            className='text-white hover:underline text-lg'
                                         >
                                             {file.name}
                                         </Link>
