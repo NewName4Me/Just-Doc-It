@@ -4,16 +4,17 @@ import Header from '@components/header/HeaderIndex';
 
 function ResultIndex() {
     const location = useLocation();
-    const { uploadedFiles, language } = location.state || {};  // Obtiene los datos del state
+    const { uploadedFiles, language } = location.state || {};
 
-    // Obtener la extensión asociada al lenguaje seleccionado
+    console.log('Uploaded Files:', uploadedFiles); // Para verificar qué datos se reciben
+    console.log('Language:', language); // Para verificar el lenguaje recibido
+
     const languageExtension = {
         js: '.js',
         php: '.php',
         py: '.py',
     }[language] || '';
 
-    // Filtrar archivos que coincidan con la extensión del lenguaje seleccionado
     const filteredFiles = uploadedFiles?.filter(file =>
         file.name.endsWith(languageExtension)
     );
@@ -27,7 +28,6 @@ function ResultIndex() {
                     {filteredFiles && filteredFiles.length > 0 ? (
                         <ul className='list-disc ml-3'>
                             {filteredFiles.map((file, index) => {
-                                // Obtener el nombre del archivo sin la extensión
                                 const uniqueId = `${index}-${file.name}`;
 
                                 return (
@@ -35,7 +35,7 @@ function ResultIndex() {
                                         <span className='w-5 h-5 rounded-full bg-success mr-4'></span>
                                         <Link
                                             to={`/result/${uniqueId}`}
-                                            state={{ uploadedFiles, language }} // Pasar el estado necesario
+                                            state={{ uploadedFiles, language }}
                                             className='text-white hover:underline text-lg'
                                         >
                                             {file.name}
