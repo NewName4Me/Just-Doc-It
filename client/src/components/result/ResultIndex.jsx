@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver'; // Instala file-saver si no lo has hecho
 import Header from '@components/header/HeaderIndex';
-import { procesarArchivosJs, procesarArchivosPhp } from '@utils/procesarArchivosSegunLenguaje';
+import { procesarArchivosJs, procesarArchivosPhp, procesarArchivosPy } from '@utils/procesarArchivosSegunLenguaje';
 
 function ResultIndex() {
     const location = useLocation();
@@ -64,6 +64,8 @@ function ResultIndex() {
                 funcionesDocumentadas = JSON.parse(procesarArchivosJs(fileContent)); // Procesar el contenido
             } else if (language === 'php') {
                 funcionesDocumentadas = JSON.parse(procesarArchivosPhp(fileContent)); // Procesar el contenido
+            } else if (language === 'py') {
+                funcionesDocumentadas = JSON.parse(procesarArchivosPy(fileContent)); // Procesar el contenido
             }
 
             // Crear el contenido HTML para cada archivo procesado

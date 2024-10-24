@@ -37,7 +37,7 @@ function FileContent() {
                         funcionesDocumentadas = JSON.parse(procesarArchivosPhp(content));
                         break;
                     case 'py':
-                        funcionesDocumentadas = procesarArchivosPy(content); // Aquí se asume que esta función no devuelve JSON
+                        funcionesDocumentadas = JSON.parse(procesarArchivosPy(content)); // Aquí se asume que esta función no devuelve JSON
                         break;
                     default:
                         throw new Error('Lenguaje no soportado');
