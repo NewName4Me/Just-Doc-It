@@ -42,6 +42,7 @@ function FileContent() {
                 <h1 className='text-white text-3xl mb-8'>Contenido de {file.name}</h1>
                 <Link
                     to="/result"
+                    state={{ uploadedFiles, language: location.state.language }} // Pasar el estado de uploadedFiles y language al volver
                     className="mt-4 inline-block text-white bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded"
                 >
                     Volver a la lista de archivos

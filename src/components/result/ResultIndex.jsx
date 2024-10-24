@@ -21,13 +21,13 @@ function ResultIndex() {
     return (
         <>
             <Header />
-            <main className='h-screen pt-20 pl-16 '>
+            <main className='h-screen pt-20 pl-16'>
                 <h1 className='text-white text-3xl mb-8'>Archivos para {language.toUpperCase()}</h1>
                 <section className='ml-14 border-l-4 border-warning'>
                     {filteredFiles && filteredFiles.length > 0 ? (
                         <ul className='list-disc ml-3'>
                             {filteredFiles.map((file, index) => {
-                                const relativePath = file.webkitRelativePath.replace(new RegExp(`^${language}/`), '');
+                                // Obtener el nombre del archivo sin la extensión
                                 const uniqueId = `${index}-${file.name}`;
 
                                 return (
@@ -35,10 +35,10 @@ function ResultIndex() {
                                         <span className='w-4 h-4 rounded-full bg-success mr-4'></span>
                                         <Link
                                             to={`/result/${uniqueId}`}
-                                            state={{ uploadedFiles }}  // Pasar el estado aquí
+                                            state={{ uploadedFiles, language }} // Pasar el estado necesario
                                             className='text-white hover:underline'
                                         >
-                                            {relativePath}
+                                            {file.name}
                                         </Link>
                                     </li>
                                 );
