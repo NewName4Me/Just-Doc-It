@@ -14,7 +14,7 @@ function buttons() {
 
             <button type='submit' className='btn btn-warning flex items-center justify-center relative w-48'>
                 <img src={logoBlack} alt="" className='w-6 absolute left-8' />
-                <p className='pl-8'>Generar Docs</p>
+                <p className='pl-8'>Generate Docs</p>
             </button>
         </div>
     )
