@@ -1,11 +1,16 @@
 import React from 'react';
 import { useLocation, useParams, Link } from 'react-router-dom';
 import Header from '@components/header/HeaderIndex';
+import {
+    procesarArchivosJs,
+    procesarArchivosPhp,
+    procesarArchivosPy
+} from '@utils/procesarArchivosSegunLenguaje';
 
 function FileContent() {
     const { id } = useParams();  // Obtener el ID de la ruta
     const location = useLocation();
-    const { uploadedFiles } = location.state || {};  // Obtener la lista de archivos del state
+    const { uploadedFiles, language } = location.state || {};  // Obtener la lista de archivos y el lenguaje del state
 
     // Verificar si uploadedFiles es undefined
     if (!uploadedFiles) {
@@ -25,7 +30,24 @@ function FileContent() {
     React.useEffect(() => {
         const reader = new FileReader();
         reader.onload = (e) => {
-            setFileContent(e.target.result);  // Guardar el contenido del archivo
+            let content = e.target.result;  // Guardar el contenido del archivo
+
+            // Objeto que mapea lenguajes a sus funciones de procesamiento
+            const processors = {
+                js: procesarArchivosJs,
+                php: procesarArchivosPhp,
+                py: procesarArchivosPy,
+            };
+
+            // Procesar el archivo según el lenguaje
+            const processor = processors[language];
+            if (processor) {
+                content = processor(content); // Llamar a la función de procesamiento
+            } else {
+                console.log('Lenguaje no soportado');
+            }
+
+            setFileContent(content); // Establecer el contenido del archivo para mostrar
         };
         reader.readAsText(file);  // Leer el archivo como texto
 
@@ -33,7 +55,7 @@ function FileContent() {
         return () => {
             reader.abort();  // Abortar la lectura del archivo si el componente se desmonta
         };
-    }, [file]);
+    }, [file, language]);
 
     return (
         <>
@@ -42,7 +64,7 @@ function FileContent() {
                 <h1 className='text-white text-3xl mb-8'>Contenido de {file.name}</h1>
                 <Link
                     to="/result"
-                    state={{ uploadedFiles, language: location.state.language }} // Pasar el estado de uploadedFiles y language al volver
+                    state={{ uploadedFiles, language }} // Pasar el estado de uploadedFiles y language al volver
                     className="mt-4 inline-block text-white bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded"
                 >
                     Volver a la lista de archivos
