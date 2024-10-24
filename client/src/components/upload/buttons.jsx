@@ -8,7 +8,7 @@ function buttons() {
             <select name="language" id="language" className='mx-4 select select-success text-white'>
                 <option value="null">Select a Language</option>
                 <option value="js">Javascript (.js)</option>
-                <option value="php" disabled>PHP (.php)</option>
+                <option value="php" >PHP (.php)</option>
                 <option value="py" disabled>Python (.py)</option>
             </select>
 

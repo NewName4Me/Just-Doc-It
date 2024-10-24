@@ -3,7 +3,7 @@ import { useLocation, Link } from 'react-router-dom';
 import JSZip from 'jszip';
 import FileSaver from 'file-saver'; // Instala file-saver si no lo has hecho
 import Header from '@components/header/HeaderIndex';
-import { procesarArchivosJs } from '@utils/procesarArchivosSegunLenguaje';
+import { procesarArchivosJs, procesarArchivosPhp } from '@utils/procesarArchivosSegunLenguaje';
 
 function ResultIndex() {
     const location = useLocation();
@@ -45,7 +45,7 @@ function ResultIndex() {
                     ${filteredFiles.map(file => `
                         <li>
                             <div class="green-circle"></div>
-                            <a href="${file.name}.html">${file.name}</a>
+                            <a href="${file.name}.html">${file.name} (${file.webkitRelativePath})</a>
                         </li>
                     `).join('')}
                 </ul>
@@ -59,7 +59,12 @@ function ResultIndex() {
         // Añadir cada archivo enlazado al ZIP
         for (const file of filteredFiles) {
             const fileContent = await readFileContent(file);
-            const funcionesDocumentadas = JSON.parse(procesarArchivosJs(fileContent)); // Procesar el contenido
+            let funcionesDocumentadas;
+            if (language === 'js') {
+                funcionesDocumentadas = JSON.parse(procesarArchivosJs(fileContent)); // Procesar el contenido
+            } else if (language === 'php') {
+                funcionesDocumentadas = JSON.parse(procesarArchivosPhp(fileContent)); // Procesar el contenido
+            }
 
             // Crear el contenido HTML para cada archivo procesado
             const fileHtmlContent = `
@@ -165,3 +170,5 @@ function ResultIndex() {
 }
 
 export default ResultIndex;
+
+

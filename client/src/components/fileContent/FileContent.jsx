@@ -1,13 +1,19 @@
 import React from 'react';
 import { useLocation, useParams, useNavigate } from 'react-router-dom'; // Importar useNavigate
 import Header from '@components/header/HeaderIndex';
-import { procesarArchivosJs } from '@utils/procesarArchivosSegunLenguaje';
+import { procesarArchivosJs, procesarArchivosPhp, procesarArchivosPy } from '@utils/procesarArchivosSegunLenguaje';
 
 function FileContent() {
     const { id } = useParams();
     const location = useLocation();
     const navigate = useNavigate(); // Instancia de navigate
-    const { uploadedFiles } = location.state || {};
+    const { uploadedFiles, language } = location.state || {}; // Desestructurando language
+
+    React.useEffect(() => {
+        if (language) {
+            alert(`Lenguaje seleccionado: ${language}`); // Imprimir el lenguaje en alerta
+        }
+    }, [language]);
 
     if (!uploadedFiles) {
         return <p className="text-white">No hay archivos disponibles.</p>;
@@ -26,7 +32,23 @@ function FileContent() {
         reader.onload = (e) => {
             const content = e.target.result;
             try {
-                const funcionesDocumentadas = JSON.parse(procesarArchivosJs(content));
+                let funcionesDocumentadas;
+
+                // Llamar a la función de procesamiento según el lenguaje
+                switch (language) {
+                    case 'js':
+                        funcionesDocumentadas = JSON.parse(procesarArchivosJs(content));
+                        break;
+                    case 'php':
+                        funcionesDocumentadas = JSON.parse(procesarArchivosPhp(content));
+                        break;
+                    case 'py':
+                        funcionesDocumentadas = procesarArchivosPy(content); // Aquí se asume que esta función no devuelve JSON
+                        break;
+                    default:
+                        throw new Error('Lenguaje no soportado');
+                }
+
                 setFileContent(funcionesDocumentadas);
             } catch (error) {
                 console.error('Error al procesar el archivo:', error);
@@ -38,7 +60,7 @@ function FileContent() {
         return () => {
             reader.abort();
         };
-    }, [file]);
+    }, [file, language]); // Añadir language como dependencia
 
     return (
         <>
