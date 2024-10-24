@@ -5,7 +5,7 @@ function Free() {
     return (
         <article className='flex items-center mt-[-1rem]'>
             <img src={Present} alt="" className='w-8 mr-2' />
-            <p><span className='text-[#4D9F01]'>100% off</span> for everyone</p>
+            <p><span className='text-success'>100% off</span> for everyone</p>
         </article>
     )
 }

@@ -13,7 +13,7 @@ function index() {
 
     return (
         <header>
-            <nav className='flex items-center fixed w-full h-24 ml-8 mt-[-0.5rem] gap-4 no-underline'>
+            <nav className='flex items-center fixed w-full h-24 ml-8 mt-[-0.5rem] gap-4 no-underline z-40'>
                 <Link to='/'><img className="w-8" src={logoBlue} alt="logo" /></Link>
                 <Link to='/' className='text-2xl no-underline font-bold text-white '>
                     Just Doc It

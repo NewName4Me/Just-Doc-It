@@ -1,5 +1,5 @@
 import React from 'react'
-import Header from '@components/header'
+import Header from '@components/header/HeaderIndex'
 import Titles from '@components/hero/Titles'
 import ButtonTryIt from '@components/hero/ButtonTryIt'
 import Free from '@components/hero/Free'
