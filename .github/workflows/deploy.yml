@@ -11,23 +11,20 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
 
-      - name: Setup Node
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18" # Adjust to your Node.js version
 
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+      - run: npm install
 
-      - name: Build project
-        run: npm run build
+      - run: npm run build
 
-      - name: Upload production-ready build files
-        uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v3
         with:
           name: production-files
-          path: ./dist
+          path: ./client/dist # Specify the correct path to the dist directory
 
   deploy:
     name: Deploy
@@ -36,14 +33,14 @@ jobs:
     if: github.ref == 'refs/heads/main'
 
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v3
+      - uses: actions/checkout@v3
+
+      - uses: actions/download-artifact@v3
         with:
           name: production-files
-          path: ./dist
+          path: ./client/dist # Specify the correct path to the dist directory
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          publish_dir: ./client/dist # Specify the correct path to the dist directory
