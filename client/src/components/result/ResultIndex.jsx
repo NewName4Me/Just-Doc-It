@@ -1,9 +1,9 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import JSZip from 'jszip';
-import FileSaver from 'file-saver'; // Instala file-saver si no lo has hecho
+import FileSaver from 'file-saver';
 import Header from '@components/header/HeaderIndex';
-import { procesarArchivosJs, procesarArchivosPhp, procesarArchivosPy } from '@utils/procesarArchivosSegunLenguaje';
+import { procesarLenguajeAEjecutar } from '@utils/controlladorLenguajes';
 
 function ResultIndex() {
     const location = useLocation();
@@ -23,7 +23,6 @@ function ResultIndex() {
         const zip = new JSZip();
         const folder = zip.folder("archivos");
 
-        // Crear HTML para la página actual como index.html con estilos
         const currentPageContent = `
             <html>
             <head>
@@ -53,22 +52,12 @@ function ResultIndex() {
             </html>
         `;
 
-        // Añadir la página actual al ZIP como index.html
         folder.file("index.html", currentPageContent);
 
-        // Añadir cada archivo enlazado al ZIP
         for (const file of filteredFiles) {
             const fileContent = await readFileContent(file);
-            let funcionesDocumentadas;
-            if (language === 'js') {
-                funcionesDocumentadas = JSON.parse(procesarArchivosJs(fileContent)); // Procesar el contenido
-            } else if (language === 'php') {
-                funcionesDocumentadas = JSON.parse(procesarArchivosPhp(fileContent)); // Procesar el contenido
-            } else if (language === 'py') {
-                funcionesDocumentadas = JSON.parse(procesarArchivosPy(fileContent)); // Procesar el contenido
-            }
+            const funcionesDocumentadas = JSON.parse(procesarLenguajeAEjecutar(language, fileContent));
 
-            // Crear el contenido HTML para cada archivo procesado
             const fileHtmlContent = `
                 <html>
                 <head>
@@ -111,20 +100,15 @@ function ResultIndex() {
             folder.file(`${file.name}.html`, fileHtmlContent);
         }
 
-        // Generar el ZIP
         const content = await zip.generateAsync({ type: "blob" });
-        FileSaver.saveAs(content, "archivos.zip"); // Descargar el ZIP
+        FileSaver.saveAs(content, "archivos.zip");
     };
 
     const readFileContent = (file) => {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = (e) => {
-                resolve(e.target.result);
-            };
-            reader.onerror = (e) => {
-                reject(new Error('Error al leer el archivo'));
-            };
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = (e) => reject(new Error('Error al leer el archivo'));
             reader.readAsText(file);
         });
     };
@@ -145,8 +129,7 @@ function ResultIndex() {
                         <ul className='left-bar'>
                             {filteredFiles.map((file, index) => {
                                 const uniqueId = `${index}-${file.name}`;
-                                const filePath = file.webkitRelativePath || file.name; // Suponiendo que la ruta está disponible
-                                const trimmedPath = filePath.split('/').slice(1).join('/'); // Eliminar todo lo que está antes del primer "/"
+                                const trimmedPath = file.webkitRelativePath.split('/').slice(1).join('/');
                                 return (
                                     <li key={uniqueId} className='text-white flex items-center '>
                                         <div className='w-5 h-5 bg-success rounded-full mr-4'></div>
@@ -157,7 +140,7 @@ function ResultIndex() {
                                         >
                                             {file.name}
                                         </Link>
-                                        <span className='ml-2 text-gray-400'>({trimmedPath})</span> {/* Mostrar la ruta recortada */}
+                                        <span className='ml-2 text-gray-400'>({trimmedPath})</span>
                                     </li>
                                 );
                             })}
@@ -172,5 +155,3 @@ function ResultIndex() {
 }
 
 export default ResultIndex;
-
-

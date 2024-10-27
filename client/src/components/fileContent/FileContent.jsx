@@ -1,13 +1,13 @@
 import React from 'react';
-import { useLocation, useParams, useNavigate } from 'react-router-dom'; // Importar useNavigate
+import { useLocation, useParams, useNavigate } from 'react-router-dom';
 import Header from '@components/header/HeaderIndex';
-import { procesarArchivosJs, procesarArchivosPhp, procesarArchivosPy } from '@utils/procesarArchivosSegunLenguaje';
+import { procesarLenguajeAEjecutar } from '@utils/controlladorLenguajes';
 
 function FileContent() {
     const { id } = useParams();
     const location = useLocation();
-    const navigate = useNavigate(); // Instancia de navigate
-    const { uploadedFiles, language } = location.state || {}; // Desestructurando language
+    const navigate = useNavigate();
+    const { uploadedFiles, language } = location.state || {};
 
     if (!uploadedFiles) {
         return <p className="text-white">No hay archivos disponibles.</p>;
@@ -26,23 +26,7 @@ function FileContent() {
         reader.onload = (e) => {
             const content = e.target.result;
             try {
-                let funcionesDocumentadas;
-
-                // Llamar a la función de procesamiento según el lenguaje
-                switch (language) {
-                    case 'js':
-                        funcionesDocumentadas = JSON.parse(procesarArchivosJs(content));
-                        break;
-                    case 'php':
-                        funcionesDocumentadas = JSON.parse(procesarArchivosPhp(content));
-                        break;
-                    case 'py':
-                        funcionesDocumentadas = JSON.parse(procesarArchivosPy(content)); // Aquí se asume que esta función no devuelve JSON
-                        break;
-                    default:
-                        throw new Error('Lenguaje no soportado');
-                }
-
+                const funcionesDocumentadas = JSON.parse(procesarLenguajeAEjecutar(language, content));
                 setFileContent(funcionesDocumentadas);
             } catch (error) {
                 console.error('Error al procesar el archivo:', error);
@@ -54,7 +38,7 @@ function FileContent() {
         return () => {
             reader.abort();
         };
-    }, [file, language]); // Añadir language como dependencia
+    }, [file, language]);
 
     return (
         <>
@@ -62,7 +46,7 @@ function FileContent() {
             <main className='h-screen pt-20 pl-16 bg-gray-800'>
                 <h1 className='text-white text-3xl mb-8'>Contenido de {file.name}</h1>
                 <button
-                    onClick={() => navigate(-1)} // Navegar hacia atrás
+                    onClick={() => navigate(-1)}
                     className="mt-4 inline-block text-white bg-blue-500 hover:bg-blue-600 py-2 px-4 rounded"
                 >
                     Volver a la lista de archivos
