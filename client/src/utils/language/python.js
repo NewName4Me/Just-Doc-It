@@ -14,7 +14,7 @@ const procesarArchivosPy = (content) => {
         const functionName = match[1];
         const paramsString = match[2];
         const docString = match[3].trim();
-        const { description, params, returns } = analizarDocumentacionPy(docString, paramsString);
+        const { description, params, returns } = analizarDocumentacionPy(docString);
 
         funcionesAgrupadas.push({
             name: functionName,
@@ -33,10 +33,9 @@ const procesarArchivosPy = (content) => {
 /**
  * Analiza el bloque de documentación de una función en Python, separando descripción, parámetros y valor de retorno.
  * @param {string} docString - Bloque de documentación de la función.
- * @param {string} paramsString - Lista de parámetros de la función.
  * @returns {object} - Objeto con la descripción, parámetros y retorno de la función.
  */
-const analizarDocumentacionPy = (docString, paramsString) => {
+const analizarDocumentacionPy = (docString) => {
     const lines = docString.split('\n').map(line => line.trim());
     let description = '';
     const params = [];
@@ -44,7 +43,7 @@ const analizarDocumentacionPy = (docString, paramsString) => {
 
     lines.forEach(line => {
         const trimmedLine = line.replace(/^\"\"\" ?/, '').trim();
-        if (trimmedLine.startsWith('Parameters:')) {
+        if (trimmedLine.startsWith('Parameters:') || trimmedLine.startsWith('Args:')) {
             const paramLines = lines.slice(lines.indexOf(line) + 1);
             paramLines.forEach(paramLine => {
                 const paramMatch = paramLine.match(/(\w+)\s+\(([^)]+)\):\s*(.*)/);
