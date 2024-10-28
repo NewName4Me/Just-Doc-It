@@ -41,10 +41,10 @@ function ResultIndex() {
             <body>
                 <h1>Archivos para ${language.toUpperCase()}</h1>
                 <ul class="left-bar">
-                    ${filteredFiles.map(file => `
+                    ${filteredFiles.map((file, index) => `
                         <li>
                             <div class="green-circle"></div>
-                            <a href="${file.name}.html">${file.name} (${file.webkitRelativePath})</a>
+                            <a href="${file.name}_${index + 1}.html">${file.name} (${file.webkitRelativePath})</a>
                         </li>
                     `).join('')}
                 </ul>
@@ -54,7 +54,9 @@ function ResultIndex() {
 
         folder.file("index.html", currentPageContent);
 
+        let FileID = 0;
         for (const file of filteredFiles) {
+            FileID++;
             const fileContent = await readFileContent(file);
             const funcionesDocumentadas = JSON.parse(procesarLenguajeAEjecutar(language, fileContent));
 
@@ -97,7 +99,7 @@ function ResultIndex() {
                 </body>
                 </html>
             `;
-            folder.file(`${file.name}.html`, fileHtmlContent);
+            folder.file(`${file.name}_${FileID}.html`, fileHtmlContent);
         }
 
         const content = await zip.generateAsync({ type: "blob" });
